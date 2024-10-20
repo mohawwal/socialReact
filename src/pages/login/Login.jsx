@@ -1,21 +1,13 @@
+// Login.js
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./login.scss";
 import * as Yup from "yup";
 import { useFormik, FormikProvider, Field, ErrorMessage } from "formik";
-//import AlertContext from "../../context/alertContext";
 
 const Login = () => {
 	const { login } = useContext(AuthContext);
-	//const [, setAlert] = useContext(AlertContext);
-
-	// const showAlert = (message, type) => {
-	// 	setAlert({
-	// 		message,
-	// 		type,
-	// 	});
-	// };
 
 	const initialValue = {
 		username: "",
@@ -46,17 +38,18 @@ const Login = () => {
 			.required("Password is required"),
 	});
 
-	//formik setup
+	// Formik setup
 	const formik = useFormik({
 		initialValues: initialValue,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			try {
-				await login(values);
-				console.log('success')
+				const response = await login(values);
+				console.log("Login success:", response);
+				// You can navigate to another page or show a success message here
 			} catch (err) {
-				console.log(err?.response?.data?.message)
-				//showAlert(err?.response?.data?.message, "error");
+				console.log("Login error:", err?.response?.data?.message);
+				// Optionally show an error message or alert to the user
 			}
 		},
 	});

@@ -33,6 +33,12 @@
         border-radius: 5px;
         padding: 5px;
 
+        div {
+          @include mobile{
+            display: block;
+          }
+        }
+
         input {
           border: none;
           width: 500px;

@@ -99,7 +99,7 @@ const Post = ({ post }) => {
 								to={`/profile/${post.userId}`}
 								style={{ textDecoration: "none", color: "inherit" }}
 							>
-								<span className="name">{post.name}</span>
+								<span className="name">{post.username}</span>
 							</Link>
 							<span className="date">{moment(post.createdAt).fromNow()}</span>
 						</div>

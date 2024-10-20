@@ -14,7 +14,6 @@ const Register = () => {
 		username: "",
 		password: "",
 		email: "",
-		name: "",
 	};
 
 	const [avatar, setAvatar] = useState(null);
@@ -24,10 +23,6 @@ const Register = () => {
 			.min(3, "Username must be at least 3 characters long")
 			.max(20, "Username cannot exceed 20 characters")
 			.required("Username is required"),
-		name: Yup.string()
-			.min(3, "Name must be at least 3 characters long")
-			.max(20, "Name cannot exceed 20 characters")
-			.required("Name is required"),
 		email: Yup.string()
 			.email("Invalid email format")
 			.required("Email is required"),
@@ -59,7 +54,6 @@ const Register = () => {
 				formData.append("username", values.username);
 				formData.append("password", values.password);
 				formData.append("email", values.email);
-				formData.append("name", values.name);
 				if (avatar) {
 					formData.append("avatar", avatar); 
 				}
@@ -130,18 +124,6 @@ const Register = () => {
 								/>
 								<ErrorMessage
 									name="password"
-									component="div"
-									className="errorMsg"
-								/>
-							</div>
-							<div>
-								<Field
-									type="text"
-									name="name"
-									placeholder="Name"
-								/>
-								<ErrorMessage
-									name="name"
 									component="div"
 									className="errorMsg"
 								/>

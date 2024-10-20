@@ -11,6 +11,7 @@ import axiosInstance from "../../axios";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
 	const userId = useLocation().pathname.split("/")[2];
@@ -132,6 +133,9 @@ const Profile = () => {
 							</a>
 						)}
 					</div>
+					<div>
+						<p>{data?.info?.Bio}</p>
+					</div>
 					<div className="center">
 						<span>{data?.info?.name}</span>
 						<div className="info">
@@ -161,7 +165,9 @@ const Profile = () => {
 							)}
 						</div>
 						{userId === currentUser?.id.toString() ? (
-							<button>Update</button>
+							<button>
+								<Link to={`/profile/${userId}/update`}>Update</Link>
+							</button>
 						) : (
 							<div>
 								{isFollowing ? (

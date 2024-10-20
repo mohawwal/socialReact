@@ -18,7 +18,11 @@ const RightBar = () => {
 		},
 	});
 
-  const { data: onlineData, isLoading: onlineLoading, err: onlineErr } = useQuery({
+	const {
+		data: onlineData,
+		isLoading: onlineLoading,
+		err: onlineErr,
+	} = useQuery({
 		queryKey: ["followers"],
 		queryFn: async () => {
 			const response = await axiosInstance.get(
@@ -27,6 +31,7 @@ const RightBar = () => {
 			return response.data;
 		},
 	});
+	
 
 	const followMutation = useMutation({
 		mutationFn: (addFollow) => axiosInstance.post(`api/follow-user`, addFollow),
@@ -67,7 +72,7 @@ const RightBar = () => {
 											src={nonFollowers?.profilePic}
 											alt="pic"
 										/>
-										<span>{nonFollowers?.name}</span>
+										<span>{nonFollowers?.username}</span>
 									</div>
 									<div className="buttons">
 										<button
@@ -98,22 +103,18 @@ const RightBar = () => {
         </div> */}
 				<div className="item">
 					<span>Online Friends</span>
-          {
-							onlineData?.data?.map((details) => (
-					<div className="user">
-						
-                <div className="userInfo">
+					{onlineData?.data?.map((details) => (
+						<div className="user" key={details.id}>
+							<div className="userInfo">
 								<img
 									src={details?.profilePic}
 									alt=""
 								/>
 								<div className="online" />
-								<span>{details?.name}</span>
+								<span>{details?.username}</span>
 							</div>
-              
-					</div>
-          ))
-        }
+						</div>
+					))}
 				</div>
 			</div>
 		</div>
