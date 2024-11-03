@@ -11,7 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../axios";
 //import { display } from "@mui/system";
 
@@ -20,9 +20,10 @@ const Navbar = () => {
 	const { currentUser, logout } = useContext(AuthContext);
 
 	const location = useLocation();
-	const profilePage = location.pathname && location.pathname.includes('/profile');
+	const profilePage =
+		location.pathname && location.pathname.includes("/profile");
 
-	console.log(profilePage)
+	console.log(profilePage);
 
 	const [keyword, setKeyword] = useState("");
 
@@ -44,10 +45,11 @@ const Navbar = () => {
 		<div className="navbar">
 			<div className="left">
 				<Link
+					className="productDetails"
 					to="/"
 					style={{ textDecoration: "none" }}
 				>
-					<span>blingon</span>
+					<span>BinGun</span>
 				</Link>
 				<HomeOutlinedIcon />
 				{darkMode ? (
@@ -56,8 +58,8 @@ const Navbar = () => {
 					<DarkModeOutlinedIcon onClick={toggle} />
 				)}
 				{/* <GridViewOutlinedIcon /> */}
-				<div>
-					<div className="search">
+				<div className="searchUser">
+					<div className="searchBox">
 						<SearchOutlinedIcon />
 						<input
 							type="text"
@@ -67,12 +69,13 @@ const Navbar = () => {
 						/>
 					</div>
 					<div
+						className="userList"
 						style={
 							keyword.trim() !== "" ? { display: "block" } : { display: "none" }
 						}
 					>
 						{isLoading && <div>Loading...</div>}
-						{err && <div>Error: {err.message}</div>}
+						{err && <div className="userListErr">Error: {err.message}</div>}
 						<ul>
 							{data?.data && data?.data.length > 0 ? (
 								data?.data.map((user) => (
@@ -80,7 +83,13 @@ const Navbar = () => {
 										key={user.id}
 										onClick={handleUserClick}
 									>
-										<Link to={`/profile/${user.id}`}>{user.name}</Link>
+										<Link
+											style={{ textDecoration: "none", color: "inherit" }}
+											className="listNames"
+											to={`/profile/${user.id}`}
+										>
+											{user.Username}
+										</Link>
 									</li>
 								))
 							) : (
@@ -103,9 +112,11 @@ const Navbar = () => {
 					/>
 					<span>{currentUser.name}</span>
 				</div>
-			</div>
-			<div>
-				{currentUser !== null && profilePage ? <button onClick={() => logout()}>Logout</button> : null}
+				<div>
+					{currentUser !== null && profilePage ? (
+						<button onClick={() => logout()}>Logout</button>
+					) : null}
+				</div>
 			</div>
 		</div>
 	);

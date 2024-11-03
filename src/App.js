@@ -7,7 +7,7 @@ import {
 	Outlet,
 	Navigate,
 } from "react-router-dom";
-import Navbar from "./components/navbar/Navbar";
+//import Navbar from "./components/navbar/Navbar";
 import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
@@ -18,25 +18,53 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Update from "./pages/update/Update";
+import NavDown from "./components/navDown/NavDown";
 
 function App() {
 	const { currentUser } = useContext(AuthContext);
 
-	const { darkMode } = useContext(DarkModeContext);
+	const { darkMode, toggle } = useContext(DarkModeContext);
 
 	const queryClient = new QueryClient();
 
 	const Layout = () => {
 		return (
 			<QueryClientProvider client={queryClient}>
-				<div className={`theme-${darkMode ? "dark" : "light"}`}>
-					<Navbar />
-					<div style={{ display: "flex" }}>
-						<LeftBar />
-						<div style={{ flex: 6 }}>
-							<Outlet />
+				<div
+					className={`theme-${darkMode ? "dark" : "light"}`}
+					style={{ width: "100%" }}
+				>
+					{/* <Navbar />  */}
+					<div className="body">
+						<div
+							style={{
+								height: "100vh",
+								display: "flex",
+								flexDirection: "row",
+								width: "100%",
+								maxWidth: "1200px",
+								margin: "0px auto",
+							}}
+						>
+							<div className="leftBarSection">
+								<LeftBar
+									darkMode={darkMode}
+									toggle={toggle}
+								/>
+							</div>
+							<div className="outletSection">
+								<Outlet />
+								<div className="navDown">
+									<NavDown
+										darkMode={darkMode}
+										toggle={toggle}
+									/>
+								</div>
+							</div>
+							<div className="rightBarSection">
+								<RightBar darkMode={darkMode} />
+							</div>
 						</div>
-						<RightBar />
 					</div>
 				</div>
 			</QueryClientProvider>

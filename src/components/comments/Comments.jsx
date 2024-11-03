@@ -52,7 +52,7 @@ const Comments = ({ postId }) => {
 					onChange={(e) => setComment(e.target.value)}
 					placeholder="write a comment"
 				/>
-				<button onClick={handleComment}>Send</button>
+				<button onClick={handleComment}>Post</button>
 			</div>
 			{isLoading ? (
 				<>Loading...</>

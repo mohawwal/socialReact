@@ -1,52 +1,129 @@
 $themes: (
-  light: (
-    textColor: #000,
-    bg: white,
-    logo: darkblue,
-    bgSoft: #f6f3f3,
-    textColorSoft: #555,
-    border: lightgray,
-  ),
-  dark: (
-    textColor: whitesmoke,
-    bg: #222,
-    logo: white,
-    bgSoft: #333,
-    textColorSoft: lightgray,
-    border: #444,
-  ),
+	light: (
+		textColor: #000,
+		bg: white,
+		logo: rgba(33, 83, 211, 0.895),
+		bgSoft: #f6f3f3,
+		textColorSoft: #555555ea,
+		border: lightgray,
+		borderLine: rgb(174, 174, 174),
+		borderColor: #e8e8e8,
+		borderBackground: #121212,
+		backgroundBar: rgba(115, 190, 255, 0.881),
+		bgShadow: #ececec6e
+	),
+	dark: (
+		textColor: whitesmoke,
+		bg: #222,
+		logo: white,
+		bgSoft: #333,
+		textColorSoft: rgba(211, 211, 211, 0.942),
+		border: #444,
+		borderLine: #b0b0b0,
+		borderColor: #282828,
+		borderBackground: #fff,
+		backgroundBar: rgb(3, 51, 93),
+		bgShadow: #2525257f
+	),
 );
 
 @mixin themify($themes) {
-  @each $theme, $map in $themes {
-    .theme-#{$theme} & {
-      $theme-map: () !global;
-      @each $key, $submap in $map {
-        $value: map-get(map-get($themes, $theme), "#{$key}");
-        $theme-map: map-merge(
-          $theme-map,
-          (
-            $key: $value,
-          )
-        ) !global;
-      }
-      @content;
-      $theme-map: null !global;
-    }
-  }
+	@each $theme, $map in $themes {
+		.theme-#{$theme} & {
+			$theme-map: () !global;
+			@each $key, $submap in $map {
+				$value: map-get(map-get($themes, $theme), "#{$key}");
+				$theme-map: map-merge(
+					$theme-map,
+					(
+						$key: $value,
+					)
+				) !global;
+			}
+			@content;
+			$theme-map: null !global;
+		}
+	}
 }
 
 @function themed($key) {
-  @return map-get($theme-map, $key);
+	@return map-get($theme-map, $key);
 }
 
 @mixin mobile {
-  @media (max-width: 480px) {
-    @content;
-  }
+	@media (max-width: 480px) {
+		@content;
+	}
 }
 @mixin tablet {
-  @media (max-width: 960px) {
-    @content;
-  }
+	@media (max-width: 960px) {
+		@content;
+	}
+}
+
+.body {
+	@include themify($themes) {
+		div {
+			.leftBarSection {
+				width: 20%;
+
+				@include tablet() {
+					width: 20%;
+				}
+
+				@include mobile {
+					display: none;
+				}
+			}
+			.outletSection {
+				width: 53%;
+				position: relative;
+
+				@include tablet {
+					width: 75%;
+				}
+
+				@include mobile {
+					width: 100%;
+				}
+
+				.navDown {
+					display: none;
+
+					@include mobile {
+						display: block;
+						position: fixed;
+						bottom: 0;
+						width: 100%;
+						left: 0;
+						background-color: themed('bgSoft');
+						height: 40px;
+					}
+				}
+			}
+			.rightBarSection {
+				width: 27%;
+
+				@include tablet() {
+					display: none;
+				}
+
+				@include mobile {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+.theme-light {
+	.body {
+		background: linear-gradient(to right, white 50%, #f6f3f3 50%);
+	}
+}
+
+.theme-dark {
+	.body {
+		background: linear-gradient(to right, #222 50%, #333 50%);
+	}
 }

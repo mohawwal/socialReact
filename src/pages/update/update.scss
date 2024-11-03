@@ -1,0 +1,106 @@
+@import "../../style.scss";
+
+.updateProfile {
+	@include themify($themes) {
+        width: 100%;
+        color: themed('textColor');
+
+        .updateCover {
+            background-color: antiquewhite;
+
+            .coverImage {
+                width: 100%;
+                height: 150px;
+                position: relative;
+
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .coverEditButton {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                background-color: themed("bgShadow");
+                height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .updatePfp {
+            margin-top: -40px;
+            position: relative;
+
+            .pfp {
+                z-index: 10;
+                padding-left: 10px;
+
+                img {
+                    border-radius: 50%;
+                    border: 2px solid themed('logo');
+                }
+            }
+
+            .updatePfpBtn {
+                position: absolute;
+                bottom: 0;
+                width: 100px;
+                height: 100%;
+                display: flex;
+                align-items: flex-end;
+                justify-content: right;
+                border-radius: 50%;
+            }
+
+        }
+
+        .userInfoUpdate {
+            max-width: 400px;
+            margin: 10px;
+
+            div {
+                display: flex;
+                flex-direction: column; 
+                margin-top: 5px;
+
+                .userInfoInput {
+
+                    label {
+                        font-size: 0.8rem;
+                        color: themed('textColorSoft');
+                    }
+
+                    .textInput {
+                        background-color: transparent;
+                        border: 1px solid rgba(128, 128, 128, 0.721);
+                        padding:  5px;
+                        color: themed('textColor');
+                        border-radius: 5px;
+                        height: 25px;
+                    }
+                }
+
+                .errorMsg {
+                    text-align: right;
+                    padding: 2px 5px;
+                    font-size: 0.67rem;
+                    color: rgb(180, 25, 25);
+                }
+            }
+        }
+        button {
+            margin: 15px;
+            width: 61%;
+            height: 30px;
+            border: none;
+            color: themed('textColor');
+            background-color: themed('backgroundBar');
+            border-radius: 10px;
+        }
+    }
+}

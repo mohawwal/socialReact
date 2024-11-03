@@ -1,101 +1,193 @@
 @import "../../style.scss";
 
 .rightBar {
-  @include themify($themes) {
-    flex: 3;
-    position: sticky;
-    top: 70px;
-    height: calc(100vh - 70px);
-    overflow: scroll;
-    background-color: themed("bgSoft");
+	@include themify($themes) {
+		position: sticky;
+		//height: 100vh;
+		min-width: 250px;
+		overflow: scroll;
+		background-color: themed("bgSoft");
+		//background-color: red;
 
-    @include mobile{
-      display: none;
-    }
-    @include tablet{
-      display: none;
-    }
+		@include mobile {
+			display: none;
+		}
+		@include tablet {
+			display: none;
+		}
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
+		&::-webkit-scrollbar {
+			display: none;
+		}
 
-    .container {
-      padding: 20px;
+		.container {
+			padding: 20px;
 
-      .item {
-        -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-        -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: themed("bg");
+			.search {
+				position: relative;
+				margin-bottom: 30px;
 
-        span {
-          color: gray;
-        }
+				.searchBox {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 5px;
+					padding: 7px;
+					border: 0.5px solid themed("borderLine");
+					border-radius: 15px;
+					background-color: none;
 
-        .user {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin: 20px 0px;
+					input {
+						width: 90%;
+						border: none;
+						font-size: 0.8rem;
+						background-color: themed("bgSoft");
+						color: themed("textColor");
+						padding: 0 4px;
+					}
+				}
 
-          .userInfo {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: relative;
+				.userList {
+					position: absolute;
+					z-index: 100;
+					background-color: themed("borderColor");
+					//border: 1px solid themed('border');
+					width: 94.5%;
+					border-radius: 5px;
+					padding: 3px 8px;
+					margin-top: 10px;
+					box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 
-            img {
-              width: 40px;
-              height: 40px;
-              border-radius: 50%;
-              object-fit: cover;
-            }
+					ul {
+						list-style: none;
 
-            .online {
-              width: 12px;
-              height: 12px;
-              border-radius: 50%;
-              background-color: limegreen;
-              position: absolute;
-              top: 0;
-              left: 30px;
-            }
+						li {
+							color: themed("textColor");
+							font-size: 0.8rem;
+							padding: 5px 2px;
+						}
+					}
+				}
+			}
 
-            p {
-              color: themed("textColorSoft");
-            }
+			.item {
+				-webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+				-moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+				box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+				padding: 20px;
+				margin-bottom: 20px;
+				background-color: themed("bg");
 
-            span {
-              font-weight: 500;
-              color: themed("textColor");
-            }
-          }
+				span {
+					color: gray;
+					font-size: 0.8rem;
+				}
 
-          .buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+				.user {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					margin: 10px 0px;
 
-            button {
-              border: none;
-              padding: 5px;
-              color: white;
-              cursor: pointer;
+					.userImg {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 5px;
+						width: 80%;
+						height: 37px;
 
-              &:first-child {
-                background-color: #5271ff;
-              }
+						img {
+							width: 32px;
+							height: 32px;
+							border-radius: 50%;
+							border: 2px solid themed("logo");
+						}
 
-              &:last-child {
-                background-color: #f0544f;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+						div {
+							display: flex;
+							align-items: flex-start;
+							height: 30px;
+							justify-content: center;
+							flex-direction: column;
+							width: 60%;
+
+							.nonFollowersName {
+								color: themed("textColor");
+								font-weight: 500;
+							}
+
+							@include tablet {
+								display: none;
+							}
+
+							p {
+								color: themed("textColorSoft");
+								font-size: 0.65rem;
+							}
+						}
+					}
+
+					.userInfo {
+						display: flex;
+						align-items: center;
+						gap: 20px;
+						position: relative;
+
+						img {
+							width: 38px;
+							height: 38px;
+							border-radius: 50%;
+							object-fit: cover;
+						}
+
+						.online {
+							width: 12px;
+							height: 12px;
+							border-radius: 50%;
+							background-color: limegreen;
+							position: absolute;
+							top: 0;
+							left: 30px;
+						}
+
+						div {
+							.followUsername {
+								color: themed("textColorSoft");
+								font-size: 0.65rem;
+							}
+
+							span {
+								font-weight: 500;
+								color: themed("textColor");
+							}
+						}
+					}
+
+					.buttons {
+						display: flex;
+						align-items: center;
+						gap: 8px;
+
+						button {
+							border: none;
+							padding: 4px;
+							color: white;
+							cursor: pointer;
+							border-radius: 4px;
+							font-size: 0.7rem;
+
+							&:first-child {
+								background-color: #5271ff;
+							}
+
+							&:last-child {
+								background-color: #dd1b15e6;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

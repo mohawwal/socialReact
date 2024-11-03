@@ -3,13 +3,23 @@ import axiosInstance from "../../axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Search from "../../assets/svg/Search";
 
-const RightBar = () => {
+const RightBar = ({ darkMode, searchBtn }) => {
 	const { currentUser } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+	const navigate = useNavigate()
+
+	const goToUserProfile = (userId) => {
+		navigate(`/profile/${userId}`)
+	}
+
+	const fillMode = darkMode ? "white" : "#222222da";
 
 	const { data, isLoading, err } = useQuery({
-		queryKey: ["rel"],
+		queryKey: ["rel", currentUser.id],
 		queryFn: async () => {
 			const response = await axiosInstance.get(
 				`/api/non-followers/${currentUser.id}`,
@@ -31,7 +41,6 @@ const RightBar = () => {
 			return response.data;
 		},
 	});
-	
 
 	const followMutation = useMutation({
 		mutationFn: (addFollow) => axiosInstance.post(`api/follow-user`, addFollow),
@@ -47,17 +56,81 @@ const RightBar = () => {
 		});
 	};
 
-	if (err || onlineErr) {
-		return <>{err || onlineErr}</>;
-	}
+	const [keyword, setKeyword] = useState("");
 
-	if (isLoading || onlineLoading) {
-		return <>Loading...</>;
-	}
+	const {
+		data: searchData,
+		isLoading: searchLoading,
+		error: searchError,
+	} = useQuery({
+		queryKey: [keyword, "user"],
+		queryFn: async () => {
+			if (keyword.trim() === "") return [];
+			const response = await axiosInstance.get(`/api/users?keyword=${keyword}`);
+			return response.data;
+		},
+	});
+
+	const handleUserClick = () => {
+		setKeyword("");
+	};
+
+	const isAnyLoading = isLoading || onlineLoading || searchLoading;
+	const anyError = err || onlineErr || searchError;
+
+	if (isAnyLoading) return <>Loading...</>;
+	if (anyError) return <>Error: {anyError.message}</>;
 
 	return (
 		<div className="rightBar">
 			<div className="container">
+				<div className="search">
+					<div
+						className="searchBox"
+						style={searchBtn ? { border: "blue" } : null}
+					>
+						<Search
+							fill={fillMode}
+							className="barIcon"
+							width={"14px"}
+						/>
+						<input
+							type="text"
+							placeholder="Search..."
+							value={keyword}
+							onChange={(e) => setKeyword(e.target.value)}
+						/>
+					</div>
+					<div
+						className="userList"
+						style={
+							keyword.trim() !== "" ? { display: "block" } : { display: "none" }
+						}
+					>
+						{isLoading && <div>Loading...</div>}
+						{err && <div className="userListErr">Error: {err.message}</div>}
+						<ul>
+							{searchData?.data && searchData?.data.length > 0 ? (
+								searchData?.data.map((user) => (
+									<li
+										key={user.id}
+										onClick={handleUserClick}
+									>
+										<div
+											onClick={() => goToUserProfile(user.id)}
+											style={{ textDecoration: "none", color: "inherit" }}
+											className="listNames"
+										>
+											@ {user.Username}
+										</div>
+									</li>
+								))
+							) : (
+								<li>No users found</li>
+							)}
+						</ul>
+					</div>
+				</div>
 				<div className="item">
 					<span>Suggestions For You</span>
 					{data?.data &&
@@ -67,12 +140,17 @@ const RightBar = () => {
 									className="user"
 									key={nonFollowers.id}
 								>
-									<div className="userInfo">
+									<div className="userImg">
 										<img
 											src={nonFollowers?.profilePic}
 											alt="pic"
 										/>
-										<span>{nonFollowers?.username}</span>
+										<div>
+											<span className="nonFollowersName">
+												{nonFollowers?.name}
+											</span>
+											<p>@{nonFollowers?.username}</p>
+										</div>
 									</div>
 									<div className="buttons">
 										<button
@@ -80,38 +158,28 @@ const RightBar = () => {
 										>
 											follow
 										</button>
-										{/* <button>dismiss</button> */}
 									</div>
 								</div>
 							);
 						})}
 				</div>
-				{/* <div className="item">
-          <span>Latest Activities</span>
-          <div className="user">
-            <div className="userInfo">
-              <img
-                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-                alt=""
-              />
-              <p>
-                <span>Jane Doe</span> changed their cover picture
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-        </div> */}
 				<div className="item">
 					<span>Online Friends</span>
 					{onlineData?.data?.map((details) => (
-						<div className="user" key={details.id}>
+						<div
+							className="user"
+							key={details.id}
+						>
 							<div className="userInfo">
 								<img
 									src={details?.profilePic}
 									alt=""
 								/>
 								<div className="online" />
-								<span>{details?.username}</span>
+								<div>
+									<span className="nonFollowersName">{details?.username}</span>
+									<p className="followUsername">@{details?.name}</p>
+								</div>
 							</div>
 						</div>
 					))}

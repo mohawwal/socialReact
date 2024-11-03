@@ -1,72 +1,101 @@
 @import "../../style.scss";
 
 .post {
-  @include themify($themes) {
-    -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-    -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-    box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-    border-radius: 20px;
-    background-color: themed("bg");
-    color: themed("textColor");
+	@include themify($themes) {
+		-webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+		-moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+		box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+		border-radius: 20px;
+		background-color: themed("bg");
+		color: themed("textColor");
 
-    .container {
-      padding: 20px;
+		.container {
+			padding: 20px 15px;
 
-      .user {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+			.user {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
 
-        .userInfo {
-          display: flex;
-          gap: 20px;
+				.userInfo {
+					display: flex;
+					gap: 20px;
 
-          img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-          }
+					img {
+						width: 40px;
+						height: 40px;
+						border-radius: 50%;
+						object-fit: cover;
+					}
 
-          .details {
+					.details {
+						display: flex;
+						flex-direction: column;
+
+						.name {
+							font-weight: 500;
+							font-size: 0.9rem;
+						}
+
+						.date {
+							font-size: 0.7rem;
+							color: themed("textColorSoft");
+						}
+					}
+				}
+			}
+
+			.content {
+				margin: 20px 0px;
+
+				p {
+					font-size: 0.8rem;
+				}
+
+				img {
+					width: 100%;
+					max-height: 500px;
+					object-fit: cover;
+					margin-top: 20px;
+				}
+			}
+
+			.info {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+				display: flex;
+				align-items: center;
+				flex-direction: row;
+				justify-content: space-between;
+				width: 100%;
+
+				.infoDetails {
+					display: flex;
+					align-items: center;
+					gap: 20px;
+
+					.item {
+						display: flex;
+						align-items: center;
+						gap: 5px;
+						cursor: pointer;
+						font-size: 11px;
+					}
+
+				}
+
+        .bookmark {
+
+          .item {
             display: flex;
-            flex-direction: column;
-
-            .name {
-              font-weight: 500;
-            }
-
-            .date {
-              font-size: 12px;
-            }
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 11px;
           }
         }
-      }
-
-      .content {
-        margin: 20px 0px;
-
-        img {
-          width: 100%;
-          max-height: 500px;
-          object-fit: cover;
-          margin-top: 20px;
-        }
-      }
-
-      .info {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-
-        .item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-      }
-    }
-  }
+			}
+		}
+	}
 }
