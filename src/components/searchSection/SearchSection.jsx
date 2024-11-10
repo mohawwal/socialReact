@@ -1,53 +1,62 @@
 import React, { useContext } from "react";
 import { SearchContext } from "../../context/searchContext";
 import "./searchSection.scss";
-import { useNavigate } from "react-router-dom";
-import Press from "../../assets/svg/Press";
+import { Link } from "react-router-dom";
 
 const SearchSection = () => {
-	const navigate = useNavigate();
-	const { searchResults, setSearchResults, setToggleSearch, toggleSearch, setKeyword, searchFunc } = useContext(SearchContext);
+	const { setKeyword, keyword, searchResults, searchFunc } =
+		useContext(SearchContext);
 
-	const handleKeywords = (e) => {
-		setKeyword(e.target.value);
+	const handleInputChange = (e) => {
+		const value = e.target.value;
+		setKeyword(value);
+		searchFunc();
 	};
-
-	const handleProfile = (userId) => {
-		navigate(`/profile/${userId}`);
-    setSearchResults([])
-    setToggleSearch(false)
-	};
-
 
 	return (
-		<div className="searchSection" style={toggleSearch ? {display: 'block'} : {display: 'none'}}>
-			<div className="searchText">
+		<div className="searchSection">
+			<div className="searchSectionInput">
 				<input
 					type="text"
-					placeholder="🔍 search username..."
-					onChange={handleKeywords}
+					value={keyword}
+					onChange={handleInputChange}
+					placeholder="Search users..."
 				/>
-				<span onClick={searchFunc}>
-					<Press
-						width={"23px"}
-						fill={"grey"}
-					/>
-				</span>
 			</div>
-
 			<div className="searchSectionList">
-				<div>
-					{Array.isArray(searchResults) &&
-						searchResults.map((result) => (
-							<span
-								onClick={() => handleProfile(result.id)}
-								style={{ textDecoration: "none", color: "inherit" }}
-								className="listNames"
-							>
-								@ {result.Username}
-							</span>
-						))}
-				</div>
+				{searchResults.length > 0 ? (
+					searchResults.map((result) => (
+						<div
+							className="userInfo"
+							key={result.id}
+						>
+							<img
+								src={result.profilePic}
+								alt=""
+							/>
+							<div className="details">
+								<Link
+									to={`/profile/${result.id}`}
+									style={{ textDecoration: "none", color: "inherit" }}
+								>
+									<span className="name">{result.Username}</span>
+								</Link>
+								<span className="date">{result.name}</span>
+							</div>
+						</div>
+					))
+				) : (
+					<div
+						style={{
+							fontSize: "0.8rem",
+							fontWeight: "500",
+							textAlign: "center",
+						}}
+						className="notF"
+					>
+						No results found
+					</div>
+				)}
 			</div>
 		</div>
 	);

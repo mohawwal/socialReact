@@ -6,6 +6,7 @@
 		height: 100vh;
 		overflow-y: scroll;
 		padding: 0 20px;
+		//background-color: transparent;
 
 		&::-webkit-scrollbar {
 			display: none;
@@ -29,18 +30,30 @@
 				display: none;
 			}
 
-			.searchToggle {
+			.mode {
 				display: none;
-
+				
 				@include mobile {
 					display: block;
+					position: fixed;
+					background-color: rgba(128, 128, 128, 0.427);
+					bottom: 5%;
+					right: 0;
+					margin: 20px 8px;
+					width: 30px;
+					height: 30px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 50%;
 				}
 
-				@include tablet {
-					display: block;
+				div {
+					display: flex;
+					align-items: center;
+					justify-content: center;
 				}
 			}
 		}
-		
 	}
 }

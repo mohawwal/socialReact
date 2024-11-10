@@ -117,7 +117,7 @@ const Share = () => {
 					</div>
 					<div className="right">
 						{isLoading ? (
-							<ClipLoader color={"white"} size={20} />
+							<ClipLoader color={"white"} size={16} />
 						) : (
 							<button disabled={isLoading} onClick={handleClick}>
 								Bling

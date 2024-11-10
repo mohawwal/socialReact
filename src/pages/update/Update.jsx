@@ -5,42 +5,61 @@ import { useFormik, FormikProvider, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../../context/authContext";
 import { DarkModeContext } from "../../context/darkModeContext";
 import axiosInstance from "../../axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useNavigate, useLocation } from "react-router-dom";
 import AddImage from "../../assets/svg/AddImage";
 import EditPen from "../../assets/svg/EditPen";
 import ClipLoader from "react-spinners/ClipLoader";
+import AlertContext from "../../context/alertContext";
 
 const Update = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { currentUser } = useContext(AuthContext);
 	const { darkMode } = useContext(DarkModeContext);
+	const userId = useLocation().pathname.split("/")[2];
+	const [, setAlert] = useContext(AlertContext);
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+	};
 
+	const { userLoading, userErr, data } = useQuery({
+		queryKey: ["user", userId],
+		queryFn: async () => {
+			const response = await axiosInstance.get(`/api/user/${userId}`);
+			return response.data;
+		},
+	});
+
+	console.log(userLoading)
+	
 	const fillMode = darkMode ? "white" : "black";
 
 	const initialValue = {
-		username: currentUser?.Username,
-		email: currentUser?.email,
-		Bio: currentUser?.Bio,
-		city: currentUser?.city,
-		website: currentUser?.website,
-		instagram: currentUser?.instagram,
-		x: currentUser?.x,
-		linkedln: currentUser?.linkedln,
+		username: data?.info?.Username,
+		email: data?.info?.email,
+		Bio: data?.info?.Bio,
+		city: data?.info?.city,
+		website: data?.info?.website,
+		instagram: data?.info?.instagram,
+		x: data?.info?.x,
+		linkedln: data?.info?.linkedln,
 	};
 
-	const [profilePic, setProfilePic] = useState(null);
+	const [profilePic, setProfilePic] = useState(data?.info?.profilePic);
 	const [previewProfilePic, setPreviewProfilePic] = useState(
-		currentUser?.profilePic && currentUser?.profilePic.length > 1
-			? currentUser?.profilePic
+		data?.info?.profilePic && data?.info?.profilePic.length > 1
+			? data?.info?.profilePic
 			: "Add profile picture",
 	);
 
-	const [coverPic, setCoverPic] = useState(null);
+	const [coverPic, setCoverPic] = useState(data?.info?.coverPic);
 	const [previewCoverPic, setPreviewCoverPic] = useState(
-		currentUser?.coverPic && currentUser?.coverPic.length > 1
-			? currentUser?.coverPic
+		data?.info?.coverPic && data?.info?.coverPic.length > 1
+			? data?.info?.coverPic
 			: "Add cover picture",
 	);
 
@@ -54,10 +73,16 @@ const Update = () => {
 						setPreviewProfilePic(reader.result);
 						setProfilePic(file);
 						formik.setFieldValue("profilePic", file);
-					} else if (type === "coverPic") {
+					} else {
+						setProfilePic(previewProfilePic)
+					}
+
+					if (type === "coverPic") {
 						setPreviewCoverPic(reader.result);
 						setCoverPic(file);
 						formik.setFieldValue("coverPic", file);
+					}else {
+						setCoverPic(previewCoverPic)
 					}
 				}
 			};
@@ -68,17 +93,18 @@ const Update = () => {
 	// Define the mutation outside of onSubmit
 	const updateProfileMutation = useMutation({
 		mutationFn: async (formData) =>
-			await axiosInstance.put("/api/update-User-Profile", formData),
+		  await axiosInstance.put("/api/update-User-Profile", formData),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["user"] });
-			navigate(`/profile/${currentUser.id}`);
+		  queryClient.invalidateQueries({ queryKey: ["user", currentUser.id] });
+		  navigate(`/profile/${currentUser.id}`);
 		},
 		onError: (error) => {
-			console.error("Error updating profile:", error);
+		  console.error("Error updating profile:", error);
 		},
-	});
+	  });
+	  
 
-	const isLoading = updateProfileMutation.isLoading;
+	const isLoading = updateProfileMutation.isPending;
 
 	// Validation schema
 	const validationSchema = Yup.object().shape({
@@ -110,206 +136,212 @@ const Update = () => {
 			if (profilePic) {
 				formData.append("profilePic", profilePic);
 			}
+
 			if (coverPic) {
 				formData.append("coverPic", coverPic);
 			}
 
 			// Call the mutation
 			updateProfileMutation.mutate(formData);
+			showAlert("Profile update successful", "success")
 		},
 	});
+
+	console.log(userErr)
 
 	return (
 		<div className="updateProfile">
 			{/* <h4>update</h4> */}
-			<FormikProvider value={formik}>
-				<form onSubmit={formik.handleSubmit}>
-					<div className="updateCover">
-						<div className="coverImage">
-							<img
-								src={previewCoverPic}
-								alt="chosen"
-							/>
-						</div>
-						<div className="coverEditButton">
-							<label htmlFor="cover_upload">
-								<AddImage
-									fill={fillMode}
-									width={"60px"}
+			<div className="upProfile">
+				<FormikProvider value={formik}>
+					<form onSubmit={formik.handleSubmit}>
+						<div className="updateCover">
+							<div className="coverImage">
+								<img
+									src={previewCoverPic}
+									alt="chosen"
 								/>
-							</label>
-							<input
-								id="cover_upload"
-								type="file"
-								name="cover"
-								accept="image/*"
-								onChange={(e) => handleFileChange(e, "coverPic")}
-								style={{ display: "none" }}
-							/>
-						</div>
-					</div>
-					<div className="updatePfp">
-						<div className="pfp">
-							<img
-								src={previewProfilePic}
-								alt="chosen"
-								style={{ height: "80px", width: "80px" }}
-							/>
-						</div>
-						<div className="updatePfpBtn">
-							<label htmlFor="avatar_upload">
-								<EditPen
-									fill={fillMode}
-									width={"20px"}
+							</div>
+							<div className="coverEditButton">
+								<label htmlFor="cover_upload">
+									<AddImage
+										fill={fillMode}
+										width={"50px"}
+									/>
+								</label>
+								<input
+									id="cover_upload"
+									type="file"
+									name="cover"
+									accept="image/*"
+									onChange={(e) => handleFileChange(e, "coverPic")}
+									style={{ display: "none" }}
 								/>
-							</label>
-							<input
-								id="avatar_upload"
-								type="file"
-								name="avatar"
-								accept="image/*"
-								onChange={(e) => handleFileChange(e, "profilePic")}
-								style={{ display: "none" }}
-							/>
+							</div>
 						</div>
-					</div>
+						<div className="updatePfp">
+							<div className="pfp">
+								<img
+									src={previewProfilePic}
+									alt="chosen"
+									style={{ height: "80px", width: "80px" }}
+								/>
+							</div>
+							<div className="updatePfpBtn">
+								<label htmlFor="avatar_upload">
+									<EditPen
+										fill={fillMode}
+										width={"18px"}
+									/>
+								</label>
+								<input
+									id="avatar_upload"
+									type="file"
+									name="avatar"
+									accept="image/*"
+									onChange={(e) => handleFileChange(e, "profilePic")}
+									style={{ display: "none" }}
+								/>
+							</div>
+						</div>
 
-					<div className="userInfoUpdate">
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="username">Username</label>
-								<Field
-									className="textInput"
-									id="username"
-									type="text"
+						<div className="userInfoUpdate">
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="username">Username</label>
+									<Field
+										className="textInput"
+										id="username"
+										type="text"
+										name="username"
+										placeholder="Username"
+									/>
+								</div>
+								<ErrorMessage
 									name="username"
-									placeholder="Username"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="username"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="Bio">Bio</label>
-								<Field
-									className="textInput"
-									id="Bio"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="Bio">Bio</label>
+									<Field
+										className="textInput"
+										id="Bio"
+										type="text"
+										name="Bio"
+										placeholder="Bio"
+									/>
+								</div>
+								<ErrorMessage
 									name="Bio"
-									placeholder="Bio"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="Bio"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="city">city</label>
-								<Field
-									className="textInput"
-									id="city"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="city">city</label>
+									<Field
+										className="textInput"
+										id="city"
+										type="text"
+										name="city"
+										placeholder="city"
+									/>
+								</div>
+								<ErrorMessage
 									name="city"
-									placeholder="city"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="city"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="website">website</label>
-								<Field
-									className="textInput"
-									id="website"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="website">website</label>
+									<Field
+										className="textInput"
+										id="website"
+										type="text"
+										name="website"
+										placeholder="website"
+									/>
+								</div>
+								<ErrorMessage
 									name="website"
-									placeholder="website"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="website"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="instagram">instagram</label>
-								<Field
-									className="textInput"
-									id="instagram"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="instagram">instagram</label>
+									<Field
+										className="textInput"
+										id="instagram"
+										type="text"
+										name="instagram"
+										placeholder="instagram"
+									/>
+								</div>
+								<ErrorMessage
 									name="instagram"
-									placeholder="instagram"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="instagram"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="x">x</label>
-								<Field
-									className="textInput"
-									id="x"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="x">x</label>
+									<Field
+										className="textInput"
+										id="x"
+										type="text"
+										name="x"
+										placeholder="x"
+									/>
+								</div>
+								<ErrorMessage
 									name="x"
-									placeholder="x"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="x"
-								component="div"
-								className="errorMsg"
-							/>
-						</div>
-						<div>
-							<div className="userInfoInput">
-								<label htmlFor="linkedln">linkedln</label>
-								<Field
-									className="textInput"
-									id="linkedln"
-									type="text"
+							<div>
+								<div className="userInfoInput">
+									<label htmlFor="linkedln">linkedln</label>
+									<Field
+										className="textInput"
+										id="linkedln"
+										type="text"
+										name="linkedln"
+										placeholder="linkedln"
+									/>
+								</div>
+								<ErrorMessage
 									name="linkedln"
-									placeholder="linkedln"
+									component="div"
+									className="errorMsg"
 								/>
 							</div>
-							<ErrorMessage
-								name="linkedln"
-								component="div"
-								className="errorMsg"
-							/>
 						</div>
-					</div>
-					<button
-						disabled={isLoading}
-						type="submit"
-					>
-						{isLoading ? (
-							<ClipLoader
-								color={'grey'}
-								size={10}
-							/>
-						) : (
-							"Submit"
-						)}
-					</button>
-				</form>
-			</FormikProvider>
+						<button
+							disabled={isLoading}
+							type="submit"
+						>
+							{isLoading ? (
+								<ClipLoader
+									color={"grey"}
+									size={10}
+								/>
+							) : (
+								"Submit"
+							)}
+						</button>
+					</form>
+				</FormikProvider>
+			</div>
 		</div>
 	);
 };

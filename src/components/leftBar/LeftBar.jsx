@@ -17,7 +17,7 @@ import { SearchContext } from "../../context/searchContext";
 
 const LeftBar = ({ darkMode, toggle }) => {
 	const { currentUser } = useContext(AuthContext);
-	const { handleSearchToggleFunc } = useContext(SearchContext)
+	const { handleSearchToggleFunc } = useContext(SearchContext);
 	const fillMode = darkMode ? "white" : "#222222da";
 
 	return (
@@ -43,55 +43,66 @@ const LeftBar = ({ darkMode, toggle }) => {
 							<Home
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
 							<span>Home</span>
 						</Link>
-						<div
-							className="item"
+						<Link
+							to="/search"
+							className="item searchItem"
 							onClick={handleSearchToggleFunc}
 						>
 							<Search
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
 							<span>Search</span>
-						</div>
+						</Link>
 						<Link
+							to={`/message`}
 							style={{ textDecoration: "none", color: "inherit" }}
 							className="item"
 						>
 							<Message
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
 							<span>Messages</span>
 						</Link>
 						<Link
-							to='/BookMark'
+							to="/BookMark"
 							style={{ textDecoration: "none", color: "inherit" }}
 							className="item"
 						>
 							<BookMark
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
 							<span>BookMark</span>
 						</Link>
-						<Link
+						<div
 							style={{ textDecoration: "none", color: "inherit" }}
 							className="item"
 						>
 							<Portfolio
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
-							<span>Portfolio</span>
-						</Link>
+							<span>
+								<a
+									target="_blank"
+									rel="noreferrer"
+									href="https://awwal-portfolio.vercel.app/"
+									style={{textDecoration: "NONE", color: "inherit"}}
+								>
+									Portfolio
+								</a>
+							</span>
+						</div>
 						<Link
 							style={{ textDecoration: "none", color: "inherit" }}
 							className="item"
@@ -99,7 +110,7 @@ const LeftBar = ({ darkMode, toggle }) => {
 							<Community
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"23px"}
 							/>
 							<span>Community</span>
 						</Link>
@@ -108,7 +119,7 @@ const LeftBar = ({ darkMode, toggle }) => {
 								className="item"
 								onClick={toggle}
 							>
-								<LightMode width={"20px"} />
+								<LightMode width={"17px"} />
 								<span>Light Mode</span>
 							</div>
 						) : (
@@ -117,7 +128,7 @@ const LeftBar = ({ darkMode, toggle }) => {
 								onClick={toggle}
 							>
 								<DarkMode
-									width={"20px"}
+									width={"17px"}
 									fill={fillMode}
 								/>
 								<span>Dark Mode</span>
@@ -127,7 +138,7 @@ const LeftBar = ({ darkMode, toggle }) => {
 							<More
 								className="barIcon"
 								fill={fillMode}
-								width={"20px"}
+								width={"17px"}
 							/>
 							<span>More</span>
 						</div>
@@ -137,7 +148,7 @@ const LeftBar = ({ darkMode, toggle }) => {
 				<div className="downBarList">
 					<div className="postItem">
 						<span>Post</span>
-						<Post width={"20px"} />
+						<Post width={"17px"} />
 					</div>
 
 					<Link

@@ -7,14 +7,14 @@ import { useState } from "react";
 // import AlertContext from "../../context/alertContext";
 
 const Register = () => {
-	const [err, setErr] = useState(null); 
+	const [err, setErr] = useState(null);
 
 	// Formik initial value
 	const initialValue = {
 		username: "",
 		password: "",
 		email: "",
-		name: ""
+		name: "",
 	};
 
 	const [avatar, setAvatar] = useState(null);
@@ -59,16 +59,19 @@ const Register = () => {
 				formData.append("username", values.username);
 				formData.append("password", values.password);
 				formData.append("email", values.email);
-				formData.append("name", values.name)
+				formData.append("name", values.name);
 				if (avatar) {
-					formData.append("avatar", avatar); 
+					formData.append("avatar", avatar);
 				}
-				const response = await axios.post("http://localhost:8800/api/auth/register", formData);
+				const response = await axios.post(
+					"http://localhost:8800/api/auth/register",
+					formData,
+				);
 
 				if (response.status === 200 || response.status === 201) {
 					//alert("Registration successful!");
-					
-					window.location.href = "/login"; 
+
+					window.location.href = "/login";
 				}
 			} catch (err) {
 				setErr(err?.response?.data);
@@ -80,41 +83,44 @@ const Register = () => {
 	return (
 		<div className="register">
 			<div className="card">
-				<div className="left">
-					<h1>Lama Social.</h1>
+			<div className="left">
+					<h1>BLINK SPACE.</h1>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero cum,
 						alias totam numquam ipsa exercitationem dignissimos, error nam,
 						consequatur.
 					</p>
-					<span>Do you have an account?</span>
-					<Link to="/login">
-						<button>Login</button>
-					</Link>
+					<div>
+						<span>Do have an account?</span>
+						<Link to="/login">
+							<button>Login</button>
+						</Link>
+					</div>
 				</div>
 				<div className="right">
-					<h1>Register</h1>
-					{err && <div className="error">{err.message}</div>}{" "}
-					{/* Display error */}
-					<FormikProvider value={formik}>
-						<form onSubmit={formik.handleSubmit}>
+					<div className="registerForm">
+						<h1>Register</h1>
+						<FormikProvider value={formik}>
+							<form onSubmit={formik.handleSubmit}>
+								<div>
+									<label htmlFor="username">Username</label>
+									<Field
+										type="text"
+										name="username"
+										className="textBox"
+									/>
+									<ErrorMessage
+										name="username"
+										component="div"
+										className="errorMsg"
+									/>
+								</div>
 							<div>
-								<Field
-									type="text"
-									name="username"
-									placeholder="Username"
-								/>
-								<ErrorMessage
-									name="username"
-									component="div"
-									className="errorMsg"
-								/>
-							</div>
-							<div>
+							<label htmlFor="email">Email</label>
 								<Field
 									type="email"
 									name="email"
-									placeholder="Email"
+									className="textBox"
 								/>
 								<ErrorMessage
 									name="email"
@@ -123,10 +129,11 @@ const Register = () => {
 								/>
 							</div>
 							<div>
+							<label htmlFor="password">Password</label>
 								<Field
 									type="password"
 									name="password"
-									placeholder="Password"
+									className="textBox"
 								/>
 								<ErrorMessage
 									name="password"
@@ -135,10 +142,11 @@ const Register = () => {
 								/>
 							</div>
 							<div>
+							<label htmlFor="name">Name</label>
 								<Field
 									type="text"
 									name="name"
-									placeholder="Name"
+									className="textBox"
 								/>
 								<ErrorMessage
 									name="name"
@@ -153,11 +161,19 @@ const Register = () => {
 									onChange={(e) => setAvatar(e.target.files[0])}
 								/>
 							</div>
-							<button type="submit">Register</button>
+							<div className="btn">
+									<button type="submit">Register</button>
+								</div>
+								<div className="donBtn">
+									<span>Do you have an account?</span>
+									<Link to="/login">
+										<button>Login</button>
+									</Link>
+								</div>
 						</form>
 					</FormikProvider>
 				</div>
-			</div>
+			</div></div>
 		</div>
 	);
 };

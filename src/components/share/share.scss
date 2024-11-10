@@ -39,6 +39,7 @@
             width: 100%;
             border: none;
             outline: none;
+            font-size: 0.75rem;
             height: 55px;
             background-color: transparent;
             overflow: hidden;
@@ -119,7 +120,7 @@
         .right {
           button {
             border: none;
-            padding: 5px;
+            padding: 5px 10px;
             color: white;
             cursor: pointer;
             background-color: #5271ff;

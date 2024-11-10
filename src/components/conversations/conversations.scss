@@ -1,0 +1,41 @@
+@import "../../style.scss";
+
+.conversations {
+    @include themify($themes) {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 15px;
+      padding: 0 10px;
+  
+      .message {
+        padding: 5px 10px;
+        border-radius: 10px;
+        max-width: 70%;
+        word-wrap: break-word;
+  
+        &.sender {
+          align-self: flex-end;
+          background-color: #d9ffd6f5;
+          color: #1c6600;
+        }
+  
+        &.receiver {
+          align-self: flex-start;
+          background-color: #e6f7ffee;
+          color: #00529b;
+        }
+
+        .messageContent {
+          font-size: 0.8rem;
+        }
+
+        .messageTime {
+          text-align: right;
+          font-size: 0.6rem;
+          margin-top: 3px;
+        }
+      }
+    }
+  }
+  

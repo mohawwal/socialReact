@@ -12,6 +12,7 @@
 			-webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
 			-moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
 			box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+			
 
             .user {
 				display: flex;
@@ -35,6 +36,7 @@
 
 						.name {
 							font-weight: 500;
+							font-size: 0.8rem;
 						}
 
 						.date {
@@ -49,7 +51,7 @@
 				margin: 20px 0px;
 
 				p {
-					font-size: 0.9rem;
+					font-size: 0.75rem;
 				}
 
 				img {

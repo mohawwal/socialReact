@@ -1,11 +1,11 @@
 import "./profile.scss";
-//import Linkedln from "../../assets/svg/Linkedln"
-//import Ig from "../../assets/svg/Ig"
-//import X from "../../assets/svg/X"
+import Linkedln from "../../assets/svg/Linkedln";
+import Ig from "../../assets/svg/Ig";
+import X from "../../assets/svg/X";
 import Bio from "../../assets/svg/Bio";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
-//import Gmail from "../../assets/svg/Gmail"
+import Gmail from "../../assets/svg/Gmail";
 import UserPost from "../userPost/userPost";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../axios";
@@ -13,21 +13,33 @@ import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { Link } from "react-router-dom";
-import DarkMode from "../../assets/svg/DarkMode";
-import LightMode from "../../assets/svg/LightMode";
+import BookMark from "../../assets/svg/BookMark";
+import Letter from "../../assets/svg/Letter"
 import { DarkModeContext } from "../../context/darkModeContext";
+import Logout from "../../assets/svg/Logout"
+import AlertContext from "../../context/alertContext";
 
 const Profile = () => {
 	const userId = useLocation().pathname.split("/")[2];
 	const { currentUser } = useContext(AuthContext);
-	const { darkMode, toggle } = useContext(DarkModeContext);
+	
+	const { darkMode } = useContext(DarkModeContext);
+	const fillMode = darkMode ? "#222222da" : "white";
 
-	const fillMode = darkMode ? "white" : "#222222da";
+	const { logout } = useContext(AuthContext)
+	const [, setAlert] = useContext(AlertContext);
+
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+	};
 
 	const queryClient = useQueryClient();
 
 	const { isLoading, err, data } = useQuery({
-		queryKey: ["user"],
+		queryKey: ["user", userId],
 		queryFn: async () => {
 			const response = await axiosInstance.get(`/api/user/${userId}`);
 			return response.data;
@@ -42,7 +54,7 @@ const Profile = () => {
 		queryKey: ["rel"],
 		queryFn: async () => {
 			const response = await axiosInstance.get(
-				`/api/get-followers/${currentUser.id}`,
+				`/api/get-followers/${userId}`,
 			);
 			return response.data;
 		},
@@ -53,10 +65,10 @@ const Profile = () => {
 		err: followingErr,
 		data: followingData,
 	} = useQuery({
-		queryKey: ["followingData", currentUser.id],
+		queryKey: ["followingData", userId],
 		queryFn: async () => {
 			const response = await axiosInstance.get(
-				`/api/get-Followed-Data/${currentUser.id}`,
+				`/api/get-Followed-Data/${userId}`,
 			);
 			return response.data;
 		},
@@ -76,7 +88,7 @@ const Profile = () => {
 		mutationFn: () =>
 			axiosInstance.delete(
 				`/api/unFollow-user?followerUserId=${Number(userId)}&followedUserId=${
-					currentUser.id
+					userId
 				}`,
 			),
 		onSuccess: () => {
@@ -87,16 +99,18 @@ const Profile = () => {
 	const handleRelationships = () => {
 		if (isFollowing) {
 			unFollowMutation.mutate();
+			showAlert("User UnFollowed", "warning")
 		} else {
 			followMutation.mutate({
 				followerUserId: Number(userId),
 				followedUserId: currentUser.id,
 			});
+			showAlert("User Followed", "success")
 		}
 	};
 
 	if (err || relErr || followingErr) {
-		return <>{err.message || relErr.message}</>;
+		return <>{ showAlert(err.message || relErr.message, "success")}</>;
 	}
 
 	if (isLoading || relLoading || followingLoading) {
@@ -130,56 +144,36 @@ const Profile = () => {
 					<div className="profileContainer">
 						<div className="uInfo">
 							<div className="profileSocials">
-								{/* <div className="left">
-									{data?.info?.instagram &&
-										data?.info?.instagram.length > 0 && (
-											<a
-												href={`https://instagram.com/${data.info.instagram}`}
-												target="_blank"
-												rel="noreferrer"
-											>
-												<Ig width={'25px'}/>
-											</a>
-										)}
-									{data?.info?.x && data?.info?.x.length > 0 && (
-										<a
-											href={`https://twitter.com/${data.info.x}`}
-											target="_blank"
-											rel="noreferrer"
-										>
-											<X width={'25px'}/>
-										</a>
-									)}
-									{data?.info?.linkedln && data?.info?.linkedln.length > 0 && (
-										<a
-											href={`https://linkedin.com/in/${data.info.linkedln}`}
-											target="_blank"
-											rel="noreferrer"
-										>
-											<Linkedln width={'25px'}/>
-										</a>
-									)}
-									{data?.info?.email && data?.info?.email.length > 0 && (
-										<a href={`mailto:${data.info.email}`}>
-											<Gmail width={'25px'}/>
-										</a>
-									)}
-								</div> */}
 								{userId === currentUser?.id.toString() ? (
-									<button>
-										<Link
-											style={{ textDecoration: "none", color: "inherit" }}
-											to={`/profile/${userId}/update`}
-										>
-											Edit Profile
-										</Link>
-									</button>
+									<div className="bookmarkFolder">
+										<span>
+											<Link to={`/Bookmark`}>
+												<BookMark
+													fill={"#5271ff"}
+													width={"18px"}
+												/>
+											</Link>
+										</span>
+										<div>
+											<Link
+												style={{ textDecoration: "none", color: "inherit" }}
+												to={`/profile/${userId}/update`}
+											>
+												Edit Profile
+											</Link>
+										</div>
+									</div>
 								) : (
-									<div>
+									<div className="onFoll">
 										{isFollowing ? (
-											<button onClick={handleRelationships}>UnFollow</button>
+											<div className="unFoll">
+												<Link className="letterBtn" to={`/message/user/${userId}`}>
+													<Letter fill={fillMode} width={'17px'}/>
+												</Link>
+												<button onClick={handleRelationships}>UnFollow</button>
+											</div>
 										) : (
-											<button onClick={handleRelationships}>Follow</button>
+											<button className="follBtn" onClick={handleRelationships}>Follow</button>
 										)}
 									</div>
 								)}
@@ -197,36 +191,74 @@ const Profile = () => {
 							</div>
 							<div className="center">
 								<div className="info">
-									{data?.info?.city && data?.info?.city.length > 0 && (
-										<div className="item">
-											<PlaceIcon
-												fontSize="30px"
-												color="grey"
-											/>
-											<span>{data.info.city}</span>
-										</div>
-									)}
-									{/* Website */}
-									{data?.info?.website && data?.info?.website.length > 0 && (
-										<div className="item">
-											<LanguageIcon
-												width="25px"
-												color="grey"
-											/>
+									<div>
+										{data?.info?.city && data?.info?.city.length > 0 && (
+											<div className="item">
+												<PlaceIcon
+													fontSize="30px"
+													color="grey"
+												/>
+												<span>{data.info.city}</span>
+											</div>
+										)}
+										{/* Website */}
+										{data?.info?.website && data?.info?.website.length > 0 && (
+											<div className="item">
+												<LanguageIcon
+													width="25px"
+													color="grey"
+												/>
+												<a
+													style={{ textDecoration: "none", color: "inherit" }}
+													href={
+														data?.info?.website.startsWith("http")
+															? data.info.website
+															: `http://${data.info.website}`
+													}
+													target="_blank"
+													rel="noreferrer"
+												>
+													{data.info.website}
+												</a>
+											</div>
+										)}
+									</div>
+									<div className="left">
+										{data?.info?.instagram &&
+											data?.info?.instagram.length > 0 && (
+												<a
+													href={`https://instagram.com/${data.info.instagram}`}
+													target="_blank"
+													rel="noreferrer"
+												>
+													<Ig width={"17px"} />
+												</a>
+											)}
+										{data?.info?.x && data?.info?.x.length > 0 && (
 											<a
-												style={{ textDecoration: "none", color: "inherit" }}
-												href={
-													data?.info?.website.startsWith("http")
-														? data.info.website
-														: `http://${data.info.website}`
-												}
+												href={`https://twitter.com/${data.info.x}`}
 												target="_blank"
 												rel="noreferrer"
 											>
-												{data.info.website}
+												<X width={"17px"} />
 											</a>
-										</div>
-									)}
+										)}
+										{data?.info?.linkedln &&
+											data?.info?.linkedln.length > 0 && (
+												<a
+													href={`https://linkedin.com/in/${data.info.linkedln}`}
+													target="_blank"
+													rel="noreferrer"
+												>
+													<Linkedln width={"17px"} />
+												</a>
+											)}
+										{data?.info?.email && data?.info?.email.length > 0 && (
+											<a href={`mailto:${data.info.email}`}>
+												<Gmail width={"17px"} />
+											</a>
+										)}
+									</div>
 								</div>
 								<div className="profileUserFollow">
 									<span>
@@ -234,12 +266,18 @@ const Profile = () => {
 										<p>Following</p>
 									</span>
 									<span>
-										<div>{followingData.data ? followingData.data.length : 0}</div>
+										<div>
+											{followingData.data ? followingData.data.length : 0}
+										</div>
 										<p>Followers</p>
 									</span>
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className="logout" onClick={logout}>
+						<p>Logout</p>
+						<Logout width={'20px'} fill={'#5271ff'}/>
 					</div>
 				</div>
 				<div className="userPostSection">
@@ -248,26 +286,6 @@ const Profile = () => {
 						currentUser={currentUser}
 						profileData={data}
 					/>
-				</div>
-				<div className="mode">
-					{darkMode ? (
-						<div
-							className="item"
-							onClick={toggle}
-						>
-							<LightMode width={"20px"} />
-						</div>
-					) : (
-						<div
-							className="item"
-							onClick={toggle}
-						>
-							<DarkMode
-								width={"20px"}
-								fill={fillMode}
-							/>
-						</div>
-					)}
 				</div>
 			</div>
 		</div>

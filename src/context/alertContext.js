@@ -1,22 +1,32 @@
 import { createContext, useState, useRef, useEffect } from "react";
+import Cancel from "../assets/svg/Cancel"
 
 export const AlertContext = createContext();
 
-export const AlertProvider = ({ children }) => {
+export const AlertContextProvider = ({ children }) => {
 	const [alert, setAlert] = useState(null);
 	const timeRef = useRef(null);
 
 	const alertStyles = {
 		position: "fixed",
 		top: 0,
+		right: 0,
+		margin: "8px",
 		zIndex: "999",
-		padding: "16px",
-		borderRadius: "6px",
-		fontSize: "0.9rem",
-		fontWeight: 400,
-		width: "100%",
-		maxWidth: "300px",
+		padding: "7px",
+		borderRadius: "8px",
+		fontSize: "0.75rem",
+		fontWeight: "400",
+		maxWidth: "250px",
+		width: "50%",
+		display: "flex",
+		alignItems: "center", 
+		flexDirection: "row",
+		justifyContent: "space-between",
+		overflow: "hidden",
+		border: "1px solid black"
 	};
+	
 
 	const severityStyles = {
 		success: {
@@ -36,6 +46,7 @@ export const AlertProvider = ({ children }) => {
 			background: "#f8d7da",
 		},
 	};
+	
 
 	useEffect(() => {
 		if (timeRef.current) {
@@ -68,10 +79,10 @@ export const AlertProvider = ({ children }) => {
 							color: "#000",
 							fontWeight: "bold",
 							cursor: "pointer",
-							marginLeft: "10px",
+							margin: "0"
 						}}
 					>
-						x
+						<Cancel width={'17px'} fill={'red'}/>
 					</button>
 				</div>
 			)}

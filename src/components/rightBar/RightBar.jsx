@@ -3,18 +3,28 @@ import axiosInstance from "../../axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Search from "../../assets/svg/Search";
+import AlertContext from "../../context/alertContext";
 
 const RightBar = ({ darkMode, searchBtn }) => {
 	const { currentUser } = useContext(AuthContext);
 	const queryClient = useQueryClient();
-	const navigate = useNavigate()
+
+	const [, setAlert] = useContext(AlertContext);
+	const navigate = useNavigate();
+
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+	};
 
 	const goToUserProfile = (userId) => {
-		navigate(`/profile/${userId}`)
-	}
+		navigate(`/profile/${userId}`);
+	};
 
 	const fillMode = darkMode ? "white" : "#222222da";
 
@@ -46,6 +56,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 		mutationFn: (addFollow) => axiosInstance.post(`api/follow-user`, addFollow),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["rel"] });
+			showAlert("User Followed", "success");
 		},
 	});
 
@@ -79,7 +90,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 	const anyError = err || onlineErr || searchError;
 
 	if (isAnyLoading) return <>Loading...</>;
-	if (anyError) return <>Error: {anyError.message}</>;
+	if (anyError) return showAlert(anyError, "error");
 
 	return (
 		<div className="rightBar">
@@ -137,10 +148,14 @@ const RightBar = ({ darkMode, searchBtn }) => {
 						data?.data?.map((nonFollowers) => {
 							return (
 								<div
-									className="user"
+									className="user suggestUser"
 									key={nonFollowers.id}
 								>
-									<div className="userImg">
+									<Link
+										style={{ textDecoration: "none", color: "inherit" }}
+										to={`/profile/${nonFollowers.id}`}
+										className="userImg"
+									>
 										<img
 											src={nonFollowers?.profilePic}
 											alt="pic"
@@ -151,7 +166,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 											</span>
 											<p>@{nonFollowers?.username}</p>
 										</div>
-									</div>
+									</Link>
 									<div className="buttons">
 										<button
 											onClick={() => handleRelationships(nonFollowers?.id)}
@@ -166,7 +181,9 @@ const RightBar = ({ darkMode, searchBtn }) => {
 				<div className="item">
 					<span>Online Friends</span>
 					{onlineData?.data?.map((details) => (
-						<div
+						<Link
+							style={{ textDecoration: "none", color: "inherit" }}
+							to={`/message/user/${details.id}`}
 							className="user"
 							key={details.id}
 						>
@@ -181,7 +198,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 									<p className="followUsername">@{details?.name}</p>
 								</div>
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			</div>

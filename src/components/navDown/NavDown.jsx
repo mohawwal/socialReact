@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import axiosInstance from "../../axios";
 import { SearchContext } from "../../context/searchContext";
+import Profile from "../../assets/svg/Profile";
 
 const NavDown = ({ darkMode }) => {
 	const fillMode = darkMode ? "white" : "#222222da";
@@ -17,7 +18,7 @@ const NavDown = ({ darkMode }) => {
 	const { handleSearchToggleFunc } = useContext(SearchContext);
 
 	const { err, data } = useQuery({
-		queryKey: ["user"],
+		queryKey: ["user", currentUser.id],
 		queryFn: async () => {
 			const response = await axiosInstance.get(`/api/user/${currentUser.id}`);
 			return response.data;
@@ -40,10 +41,12 @@ const NavDown = ({ darkMode }) => {
 					</Link>
 				</li>
 				<li onClick={handleSearchToggleFunc}>
-					<Search
-						fill={fillMode}
-						width={"18px"}
-					/>
+					<Link to="/search">
+						<Search
+							fill={fillMode}
+							width={"18px"}
+						/>
+					</Link>
 				</li>
 				<li>
 					<AddPost
@@ -51,24 +54,33 @@ const NavDown = ({ darkMode }) => {
 						width={"18px"}
 					/>
 				</li>
-				<li>
-					<Message
-						fill={fillMode}
-						width={"18px"}
-					/>
-				</li>
+				<Link to="/message">
+					<li>
+						<Message
+							fill={fillMode}
+							width={"18px"}
+						/>
+					</li>
+				</Link>
 				<Link to={`profile/${currentUser?.id}`}>
 					<li style={{ width: "20px", height: "20px" }}>
-						<img
-							src={data?.info?.profilePic}
-							alt="profilePic"
-							className="profilePic"
-							style={{
-								width: "100%",
-								borderRadius: "50%",
-								border: "1px solid lightBlue",
-							}}
-						/>
+						{data?.info?.profilePic && data?.info?.profilePic.length > 1 ? (
+							<img
+								src={data?.info?.profilePic}
+								alt="profilePic"
+								className="profilePic"
+								style={{
+									width: "100%",
+									borderRadius: "50%",
+									border: "1px solid lightBlue",
+								}}
+							/>
+						) : (
+							<Profile
+								fill={fillMode}
+								width={"20px"}
+							/>
+						)}
 					</li>
 				</Link>
 			</ul>

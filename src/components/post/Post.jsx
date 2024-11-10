@@ -11,11 +11,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../axios";
 import { AuthContext } from "../../context/authContext";
 import BookMark from "../../assets/svg/BookMark";
+import { BookmarkContext } from "../../context/bookmarkContext";
 
 const Post = ({ post }) => {
 	const [commentOpen, setCommentOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const { currentUser } = useContext(AuthContext);
+	const { handleBookmark, bookmarks } = useContext(BookmarkContext)
+
+	const bookmarked = bookmarks.some((bookmark) => bookmark.id === post.id)
 
 	const {
 		data: commentsData,
@@ -66,29 +70,6 @@ const Post = ({ post }) => {
 		}
 	};
 
-	const [bookmarks, setBookmarks] = useState(
-		JSON.parse(localStorage.getItem("bookmarkedPosts")) || [],
-	);
-	const isPostBookmarked = bookmarks.some(
-		(savedPost) => savedPost.id === post.id,
-	);
-
-	const handleBookmark = () => {
-		let updateBookmark;
-		if (isPostBookmarked) {
-			updateBookmark = bookmarks.filter(
-				(savedPost) => savedPost.id !== post.id,
-			);
-			console.log("Post removed from bookmarks");
-		} else {
-			updateBookmark = [...bookmarks, post];
-			console.log("Post added to bookmarks");
-		}
-
-		localStorage.setItem("bookmarkedPosts", JSON.stringify(updateBookmark));
-		setBookmarks(updateBookmark);
-	};
-
 	if (error || commentsError) {
 		return <>{error.message || commentsError.message}</>;
 	}
@@ -112,7 +93,6 @@ const Post = ({ post }) => {
 							<span className="date">{moment(post.createdAt).fromNow()}</span>
 						</div>
 					</div>
-					{/* <MoreHorizIcon /> */}
 				</div>
 				<div className="content">
 					<p>{post.desc}</p>
@@ -155,10 +135,10 @@ const Post = ({ post }) => {
 					<div className="bookmark">
 						<div
 							className="item"
-							onClick={handleBookmark}
+							onClick={() => handleBookmark(post)}
 						>
 							<BookMark
-								fill={isPostBookmarked ? "lightBlue" : "grey"}
+								fill={bookmarked ? "#5271ff" : "grey"}
 								width={"20px"}
 							/>
 						</div>

@@ -1,87 +1,218 @@
-// .register {
-//   height: 100vh;
-//   background-color: rgb(193, 190, 255);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
+.register {
+	height: 100vh;
+	background-color: rgba(198, 195, 255, 0.953);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-//   .card {
-//     width: 50%;
-//     display: flex;
-//     flex-direction: row-reverse;
-//     background-color: white;
-//     border-radius: 10px;
-//     min-height: 600px;
-//     overflow: hidden;
+	.card {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		max-width: 900px;
+		height: 550px;
+        margin: 10px;
 
-//     .left {
-//       flex: 1;
-//       background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
-//         url("https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600")
-//           center;
-//       background-size: cover;
-//       padding: 50px;
-//       display: flex;
-//       flex-direction: column;
-//       gap: 30px;
-//       color: white;
+        @media screen and (max-width: 534px) {
+           margin: 0;
+           height: 100vh;
+        }
 
-//       h1 {
-//         font-size: 100px;
-//         line-height: 100px;
-//       }
-      
-//       p {
-//       }
+		.left {
+			background: linear-gradient(rgba(36, 13, 77, 0.66), rgba(30, 7, 77, 0.688)),
+				url("https://images.unsplash.com/photo-1605289982774-9a6fef564df8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJ1Z3xlbnwwfHwwfHx8MA%3D%3D")
+					center;
+			background-size: cover;
+			width: 50%;
+			height: 100%;
+            padding: 10px;
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10%;
 
-//       span {
-//         font-size: 14px;
-//       }
-      
-//       button {
-//         width: 50%;
-//         padding: 10px;
-//         border: none;
-//         background-color: white;
-//         color: rebeccapurple;
-//         font-weight: bold;
-//         cursor: pointer;
-//       }
-//     }
+            @media screen and (max-width: 669px) {
+                // display: none;
+                min-width: 50px;
+                max-width: 400px;
+                background: none;
+            }
 
-//     .right {
-//       flex: 1;
-//       padding: 50px;
-//       display: flex;
-//       flex-direction: column;
-//       gap: 50px;
-//       justify-content: center;
+            @media screen and (max-width: 534px) {
+                display: none;
+            }
 
-//       h1 {
-//       color: #555;
-//       }
-      
-//       form {
-//         display: flex;
-//         flex-direction: column;
-//         gap: 30px;
-        
-//         input {
-//         border: none;
-//         border-bottom: 1px solid lightgray;
-//         padding: 20px 10px;
-//         }
-        
-//         button {
-//           width: 50%;
-//           padding: 10px;
-//           border: none;
-//           background-color: #938eef;
-//           color: white;
-//           font-weight: bold;
-//           cursor: pointer;
-//         }
-//       }
-//     }
-//   }
-// }
+
+			h1 {
+				font-size: 70px;
+				line-height: 70px;
+                color: white;
+
+                @media screen and (max-width: 669px) {
+                    font-size: 65px;
+                    line-height: 65px;
+                    color: rgba(0, 0, 0, 0.932);
+                }
+			}
+
+			p {
+                color: rgba(253, 253, 253, 0.882);
+                font-size: 0.8rem;
+
+                @media screen and (max-width: 669px) {
+                    color: rgba(0, 0, 0, 0.823);
+                }
+			}
+
+			div {
+                color: rgba(255, 255, 255, 0.925);
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                @media screen and (max-width: 669px) {
+                    color: rgba(0, 0, 0, 0.911);
+                }
+
+                span {
+                    font-size: 11px;
+                }
+    
+                button {
+                    padding: 4px 6px;
+                    border: none;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+            }
+		}
+
+		.right {
+			width: 50%;
+			background-color: white;
+			height: 100%;
+            padding: 10px 25px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+
+            @media screen and (max-width: 669px) {
+                //width: 100%;
+                background: linear-gradient(rgba(13, 0, 27, 0.888), rgba(8, 0, 26, 0.855)),
+				url("https://images.unsplash.com/photo-1605289982774-9a6fef564df8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJ1Z3xlbnwwfHwwfHx8MA%3D%3D")
+					center;
+			    background-size: cover;
+                height: 100%;
+                color: white;
+            }
+
+            @media screen and (max-width: 534px) {
+                width: 100%;
+            }
+
+			.registerForm {
+                @media screen and (max-width: 534px) {
+                    width: 100%;
+                }
+
+                h1 {
+                    color: #131313ef;
+                    font-size: 3rem;
+
+                    @media screen and (max-width: 669px) {
+                        color: white;
+                        width: 100%;
+                    }
+                }
+    
+                form {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;
+                    flex-direction: column;
+                    width: 100%;
+    
+                    div {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: center;
+                        flex-direction: column;
+                        margin: 7px 0;
+                        font-size: 0.78rem;
+                        width: 100%;
+
+                         
+                        label {
+                            color: rgba(34, 34, 34, 0.871);
+                            @media screen and (max-width: 669px) {
+                                color: rgb(235, 233, 233);
+                            }
+                        }
+
+                        .textBox {
+                            border: none;
+                            border-bottom: 1px dashed black;
+                            margin-top: 4px;
+                            font-size: 0.85rem;
+                            width: 100%;
+
+                            @media screen and (max-width: 669px) {
+                                background-color: transparent;
+                                border-bottom: 1px dashed rgb(255, 255, 255);
+                                color: white;
+                            }
+
+                        }
+
+                        .errorMsg {
+                            font-size: 0.7rem;
+                            color: rgb(255, 35, 35);
+                        }
+                    }
+
+                    .btn {
+                        margin: 20px 0;
+                        button {
+                            background-color: transparent;
+                            background-color: rgb(109, 109, 255);
+                            border: none;
+                            color: white;
+                            font-weight: 500;
+                            padding: 4px 0;
+                            width: 50%;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .donBtn {
+                        display: none;
+
+                        @media screen and (max-width: 534px) {
+                            display: block;
+                            display: flex;
+                            justify-content: left;
+                            align-items: flex-end;
+                            width: 100%;
+                            flex-direction: column;
+                            gap: 5px;
+                            //margin-top: 10%;
+
+                            span {
+                                font-size: 11px;
+                            }
+                
+                            button {
+                                padding: 4px 6px;
+                                border: none;
+                                font-weight: bold;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+            }
+		}
+	}
+}

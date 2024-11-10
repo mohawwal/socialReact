@@ -1,13 +1,11 @@
 import { createContext, useState } from "react";
 import axiosInstance from "../axios";
-//import { useNavigate } from "react-router-dom";
 
 export const SearchContext = createContext();
 
 export const SearchContextProvider = ({ children }) => {
 	const [keyword, setKeyword] = useState("");
 	const [searchResults, setSearchResults] = useState([]);
-	//const navigate = useNavigate()
 
 	const searchFunc = async () => {
 		
@@ -24,17 +22,10 @@ export const SearchContextProvider = ({ children }) => {
 		}
 	};
 
-	const [toggleSearch, setToggleSearch] = useState(false);
-	console.log('toggleSearch', toggleSearch)
-
-	const handleSearchToggleFunc = () => {
-		setToggleSearch(!toggleSearch);
-		//navigate('/')
-	};
 
 	return (
 		<SearchContext.Provider
-			value={{ setKeyword, keyword, searchResults, handleSearchToggleFunc, toggleSearch, searchFunc }}
+			value={{ setKeyword, keyword, searchResults, searchFunc }}
 		>
 			{children}
 		</SearchContext.Provider>

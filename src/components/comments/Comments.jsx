@@ -4,11 +4,20 @@ import { AuthContext } from "../../context/authContext";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../axios";
 import moment from "moment";
+import AlertContext from "../../context/alertContext";
+
 
 const Comments = ({ postId }) => {
-	console.log(postId);
 	const { currentUser } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+
+	const [, setAlert] = useContext(AlertContext);
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+	};
 
 	const [comment, setComment] = useState("");
 
@@ -22,7 +31,6 @@ const Comments = ({ postId }) => {
 		},
 	});
 
-  console.log(err)
 
 	const mutation = useMutation({
 		mutationFn: (addComment) =>
@@ -30,6 +38,7 @@ const Comments = ({ postId }) => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["comments"] });
 			setComment("");
+			showAlert("comment added", "success")
 		},
 	});
 
@@ -39,20 +48,32 @@ const Comments = ({ postId }) => {
 		e.preventDefault();
 		mutation.mutate({ desc: comment, postId });
 	};
+
+	if(err) {
+		return(
+			showAlert(err, "error")
+		)
+	}
 	return (
 		<div className="comments">
 			<div className="write">
-				<img
-					src={currentUser.profilePic}
-					alt=""
-				/>
-				<input
-					type="text"
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
-					placeholder="write a comment"
-				/>
-				<button onClick={handleComment}>Post</button>
+				<div className="writeImg">
+					<img
+						src={currentUser.profilePic}
+						alt=""
+					/>
+				</div>
+				<div className="writeInput">
+					<input
+						type="text"
+						value={comment}
+						onChange={(e) => setComment(e.target.value)}
+						placeholder="write a comment"
+					/>
+				</div>
+				<div className="writeBtn">
+					<button onClick={handleComment}>Post</button>
+				</div>
 			</div>
 			{isLoading ? (
 				<>Loading...</>

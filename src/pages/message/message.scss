@@ -1,0 +1,49 @@
+@import "../../style.scss";
+
+.messageList {
+	@include themify($themes) {
+        font-size: 0.8rem;
+        width: 90%;
+        margin: 20px auto;
+        color: themed('textColor');
+
+        div {
+            margin-bottom: 30px;
+            .partner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-direction: row;
+                border-bottom: 1px solid themed('border');
+                padding-top: 20px;
+
+                .partnerProfile {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+
+                    img {
+                        width: 29px;
+                        height: 29px;
+                        border-radius: 50%;
+                        border: 1px solid themed('logo');
+                    }
+                }
+
+                .text {
+                    width: 45%;
+                    color: themed('textColorSoft');
+
+                    @include mobile {
+                        display: none;
+                    }
+                }
+
+                .time {
+                    color: themed('textColorSoft');
+                    font-size: 0.65rem;
+                }
+            }
+        }
+    }
+}

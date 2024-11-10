@@ -17,7 +17,7 @@
 			position: relative;
 
 			.profileHeader {
-				height: 45%;
+				height: 50%;
 				width: 98%;
 				margin: 0 auto;
 
@@ -57,13 +57,80 @@
 							width: 97%;
 							margin: 10px 0;
 
-							button {
-								background-color: themed("logo");
-								padding: 4px 8px;
-								color: themed("bgSoft");
-								border: none;
-								border-radius: 15px;
-								font-size: 0.8rem;
+							.bookmarkFolder {
+								display: flex;
+								flex-direction: row;
+								gap: 10px;
+								align-items: center;
+
+								span {
+									display: none;
+
+									@include mobile {
+										background-color: themed("bgSoft");
+										display: flex;
+										align-items: center;
+										justify-content: center;
+										width: 25px;
+										height: 25px;
+										border-radius: 50%;
+									}
+
+									@include tablet {
+										background-color: themed("bgSoft");
+										display: flex;
+										align-items: center;
+										justify-content: center;
+										width: 25px;
+										height: 25px;
+										border-radius: 50%;
+									}
+								}
+								div {
+									background-color: themed("logo");
+									padding: 4px 8px;
+									color: themed("bgSoft");
+									border: none;
+									border-radius: 15px;
+									font-size: 0.8rem;
+								}
+							}
+							.onFoll {
+								.unFoll {
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									gap: 10px;
+
+									.letterBtn {
+										display: flex;
+										align-items: center;
+										justify-content: center;
+										background-color: themed("logo");
+										padding: 3px;
+										border-radius: 50%;
+									}
+
+									button {
+										border-radius: 20px;
+										border: none;
+										padding: 3px 9px;
+										color: white;
+										cursor: pointer;
+										font-size: 0.7rem;
+										background-color: #5271ff;
+									}
+								}
+
+								.follBtn {
+									border-radius: 20px;
+									border: none;
+									padding: 3px 9px;
+										color: white;
+										cursor: pointer;
+										font-size: 0.7rem;
+										background-color: #5271ff;
+								}
 							}
 						}
 
@@ -107,7 +174,9 @@
 							.info {
 								display: flex;
 								align-items: center;
-								gap: 15px;
+								justify-content: space-between;
+								width: 100%;
+								flex-wrap: wrap;
 
 								.item {
 									display: flex;
@@ -115,6 +184,11 @@
 									gap: 3px;
 									font-size: 0.8rem;
 									color: themed("textColorSoft");
+								}
+
+								.left {
+									gap: 9.5px;
+									margin-right: 15px;
 								}
 							}
 
@@ -139,31 +213,24 @@
 							}
 						}
 					}
+
+					
+				}
+				.logout {
+					width: 95%;
+					display: flex;
+					align-items: center;
+					flex-direction: row;
+					justify-content: flex-end;
+					font-size: 0.8rem;
+					font-weight: 500;
+					color: themed('textColorSoft');
 				}
 			}
 			.userPostSection {
 				width: 90%;
 				margin: 0 auto;
 				height: 55%;
-			}
-			.mode {
-				position: fixed;
-				background-color: rgba(128, 128, 128, 0.427);
-				bottom: 5%;
-				right: 0;
-				margin: 20px 10px;
-				width: 35px;
-				height: 35px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				border-radius: 50%;
-				
-				div {
-					display: flex;
-				align-items: center;
-				justify-content: center;
-				}
 			}
 		}
 	}

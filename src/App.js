@@ -19,6 +19,10 @@ import { AuthContext } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Update from "./pages/update/Update";
 import NavDown from "./components/navDown/NavDown";
+import Bookmarks from "./components/Bookmarks/Bookmarks";
+import Message from "./pages/message/Message";
+import Chart from "./components/chart/Chart";
+import SearchSection from "./components/searchSection/SearchSection";
 
 function App() {
 	const { currentUser } = useContext(AuthContext);
@@ -100,6 +104,21 @@ function App() {
 				{
 					path: "/profile/:id/update",
 					element: <Update />,
+				},
+				{
+					path: "/Bookmark",
+					element: <Bookmarks />,
+				},
+				{
+					path: "/message",
+					element: <Message />,
+				},{
+					path: "/message/user/:receiverId",
+					element: <Chart />,
+				},
+				{
+					path: "/search",
+					element: <SearchSection />,
 				},
 			],
 		},

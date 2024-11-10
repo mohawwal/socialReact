@@ -49,6 +49,10 @@
           height: 80%;
           width: 100%;
 
+          .searchItem {
+            display: none;
+          }
+
           .item {
             display: flex;
             flex-direction: row;
@@ -60,7 +64,7 @@
             @include tablet{
               justify-content: center;
             }
-            
+
             .barIcon {
               background-color: transparent;
             }

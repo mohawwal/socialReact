@@ -83,6 +83,15 @@
 					font-size: 0.8rem;
 				}
 
+				.suggestUser {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					margin: 0;
+					padding: 0;
+
+				}
+
 				.user {
 					display: flex;
 					align-items: center;
@@ -98,8 +107,8 @@
 						height: 37px;
 
 						img {
-							width: 32px;
-							height: 32px;
+							width: 26px;
+							height: 26px;
 							border-radius: 50%;
 							border: 2px solid themed("logo");
 						}
@@ -135,20 +144,20 @@
 						position: relative;
 
 						img {
-							width: 38px;
-							height: 38px;
+							width: 27px;
+							height: 27px;
 							border-radius: 50%;
 							object-fit: cover;
 						}
 
 						.online {
-							width: 12px;
-							height: 12px;
+							width: 9px;
+							height: 9px;
 							border-radius: 50%;
 							background-color: limegreen;
 							position: absolute;
 							top: 0;
-							left: 30px;
+							left: 20px;
 						}
 
 						div {

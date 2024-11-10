@@ -1,0 +1,31 @@
+@import "../../style.scss";
+
+.chart {
+	@include themify($themes) {
+        height: 100vh;
+        scroll-behavior: smooth;
+        overflow: hidden;
+
+        @include mobile {
+            height: 93vh;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .ChartHead {
+            height: 7%;
+        }
+
+        .Conversations {
+            height: 86%;
+            overflow-y: auto; 
+            -ms-overflow-style: none; 
+            scrollbar-width: none;
+        }
+
+        .ChartText {
+            height: 7%;
+        }
+    }}

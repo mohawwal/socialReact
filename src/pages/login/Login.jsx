@@ -1,14 +1,23 @@
 // Login.js
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./login.scss";
 import * as Yup from "yup";
 import { useFormik, FormikProvider, Field, ErrorMessage } from "formik";
+import AlertContext from "../../context/alertContext";
 
 const Login = () => {
 	const { login } = useContext(AuthContext);
+	const [, setAlert] = useContext(AlertContext);
+	const navigate = useNavigate()
 
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+	};
 	const initialValue = {
 		username: "",
 		password: "",
@@ -46,10 +55,11 @@ const Login = () => {
 			try {
 				const response = await login(values);
 				console.log("Login success:", response);
-				// You can navigate to another page or show a success message here
+				showAlert("Login successful", "success");
+				navigate('/')
 			} catch (err) {
 				console.log("Login error:", err?.response?.data?.message);
-				// Optionally show an error message or alert to the user
+				showAlert( "Login failed. Please try again.", "error" ); 
 			}
 		},
 	});
@@ -58,48 +68,63 @@ const Login = () => {
 		<div className="login">
 			<div className="card">
 				<div className="left">
-					<h1>Hello World.</h1>
+					<h1>BLINK SPACE.</h1>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero cum,
 						alias totam numquam ipsa exercitationem dignissimos, error nam,
 						consequatur.
 					</p>
-					<span>Don't you have an account?</span>
-					<Link to="/register">
-						<button>Register</button>
-					</Link>
+					<div>
+						<span>Don't you have an account?</span>
+						<Link to="/register">
+							<button>Register</button>
+						</Link>
+					</div>
 				</div>
 				<div className="right">
-					<h1>Login</h1>
-					<FormikProvider value={formik}>
-						<form onSubmit={formik.handleSubmit}>
-							<div>
-								<Field
-									type="text"
-									name="username"
-									placeholder="Username"
-								/>
-								<ErrorMessage
-									name="username"
-									component="div"
-									className="errorMsg"
-								/>
-							</div>
-							<div>
-								<Field
-									type="password"
-									name="password"
-									placeholder="Password"
-								/>
-								<ErrorMessage
-									name="password"
-									component="div"
-									className="errorMsg"
-								/>
-							</div>
-							<button type="submit">Login</button>
-						</form>
-					</FormikProvider>
+					<div className="loginForm">
+						<h1>Login</h1>
+						<FormikProvider value={formik}>
+							<form onSubmit={formik.handleSubmit}>
+								<div>
+									<label htmlFor="username">Username</label>
+									<Field
+										type="text"
+										name="username"
+										className="textBox"
+									/>
+									<ErrorMessage
+										name="username"
+										component="div"
+										className="errorMsg"
+									/>
+								</div>
+								<div>
+									<label htmlFor="password">Password</label>
+									<Field
+										type="password"
+										name="password"
+										className="textBox"
+									/>
+									<ErrorMessage
+										name="password"
+										component="div"
+										className="errorMsg"
+									/>
+								</div>
+								<div className="btn">
+									<button type="submit">Login</button>
+								</div>
+
+								<div className="donBtn">
+									<span>Don't you have an account?</span>
+									<Link to="/register">
+										<button>Register</button>
+									</Link>
+								</div>
+							</form>
+						</FormikProvider>
+					</div>
 				</div>
 			</div>
 		</div>
