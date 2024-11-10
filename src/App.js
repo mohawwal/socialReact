@@ -24,6 +24,7 @@ import Message from "./pages/message/Message";
 import Chart from "./components/chart/Chart";
 import SearchSection from "./components/searchSection/SearchSection";
 
+
 function App() {
 	const { currentUser } = useContext(AuthContext);
 
@@ -38,7 +39,6 @@ function App() {
 					className={`theme-${darkMode ? "dark" : "light"}`}
 					style={{ width: "100%" }}
 				>
-					{/* <Navbar />  */}
 					<div className="body">
 						<div
 							style={{

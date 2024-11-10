@@ -225,6 +225,11 @@
 					font-size: 0.8rem;
 					font-weight: 500;
 					color: themed('textColorSoft');
+					cursor: pointer;
+				}
+
+				.logout:focus, .logout:hover {
+					color: red;
 				}
 			}
 			.userPostSection {

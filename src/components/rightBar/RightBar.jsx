@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Search from "../../assets/svg/Search";
 import AlertContext from "../../context/alertContext";
+import Skeleton from "../../skeleton/Skeleton";
 
 const RightBar = ({ darkMode, searchBtn }) => {
 	const { currentUser } = useContext(AuthContext);
@@ -86,10 +87,10 @@ const RightBar = ({ darkMode, searchBtn }) => {
 		setKeyword("");
 	};
 
-	const isAnyLoading = isLoading || onlineLoading || searchLoading;
+
 	const anyError = err || onlineErr || searchError;
 
-	if (isAnyLoading) return <>Loading...</>;
+	
 	if (anyError) return showAlert(anyError, "error");
 
 	return (
@@ -121,6 +122,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 						{isLoading && <div>Loading...</div>}
 						{err && <div className="userListErr">Error: {err.message}</div>}
 						<ul>
+							{searchLoading && <Skeleton maxWidth="800px" minWidth="80px" height="100px" />}
 							{searchData?.data && searchData?.data.length > 0 ? (
 								searchData?.data.map((user) => (
 									<li
@@ -143,6 +145,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 					</div>
 				</div>
 				<div className="item">
+					{isLoading && <Skeleton maxWidth="800px" minWidth="80px" height="150px" />}
 					<span>Suggestions For You</span>
 					{data?.data &&
 						data?.data?.map((nonFollowers) => {
@@ -179,6 +182,7 @@ const RightBar = ({ darkMode, searchBtn }) => {
 						})}
 				</div>
 				<div className="item">
+					{onlineLoading && <Skeleton maxWidth="800px" minWidth="80px" height="150px" />}
 					<span>Online Friends</span>
 					{onlineData?.data?.map((details) => (
 						<Link

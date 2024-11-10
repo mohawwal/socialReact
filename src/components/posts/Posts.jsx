@@ -2,6 +2,7 @@ import axiosInstance from "../../axios";
 import Post from "../post/Post";
 import "./posts.scss";
 import { useQuery } from "@tanstack/react-query";
+import Skeleton from "../../skeleton/Skeleton";
 
 const Posts = () => {
 	const { isLoading, error, data } = useQuery({
@@ -11,10 +12,22 @@ const Posts = () => {
 			return response.data;
 		},
 	});
-	console.log("err -", error);
-
-	if (isLoading) {
-		return <>Loading...</>;
+	
+	if(error) {
+		return(
+			<div>{error}</div>
+		)
+	}
+	
+	if(isLoading) {
+		return (
+			<div className="skeletonPosts">
+			<Skeleton maxWidth="800px" minWidth="100px" height="300px" borderRadius="20px"/>
+			<Skeleton maxWidth="800px" minWidth="100px" height="200px" borderRadius="20px"/>
+			<Skeleton maxWidth="800px" minWidth="100px" height="300px" borderRadius="20px"/>
+			<Skeleton maxWidth="800px" minWidth="100px" height="200px" borderRadius="20px"/>
+		</div>
+		)
 	}
 
 	return (

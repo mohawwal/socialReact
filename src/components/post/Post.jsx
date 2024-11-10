@@ -2,7 +2,6 @@ import "./post.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-//import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useContext, useState } from "react";
@@ -12,6 +11,7 @@ import axiosInstance from "../../axios";
 import { AuthContext } from "../../context/authContext";
 import BookMark from "../../assets/svg/BookMark";
 import { BookmarkContext } from "../../context/bookmarkContext";
+
 
 const Post = ({ post }) => {
 	const [commentOpen, setCommentOpen] = useState(false);
